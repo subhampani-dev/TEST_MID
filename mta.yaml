@@ -1,0 +1,44 @@
+_schema-version: '3.1'
+ID: TEST_MID
+version: 1.0.0
+description: A simple CAP project.
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npx cds build --production
+modules:
+  - name: TEST_MID-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: '${default-url}'
+    requires:
+      - name: MID_hdi_db
+  - name: TEST_MID-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: MID_hdi_db
+        properties:
+          TARGET_CONTAINER: '~{hdi-container-name}'
+resources:
+  - name: MID_hdi_db
+    type: com.sap.xs.hdi-container
+    parameters:
+      config:
+        schema: CENGAGE_MID_TEST
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-container-name: '${service-name}'
