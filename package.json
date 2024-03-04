@@ -8,17 +8,21 @@
   "dependencies": {
     "@sap/cds": "^7",
     "@sap/cds-hana": "^2",
-    "express": "^4"
+    "@sap/xssec": "^3.6.1",
+    "express": "^4",
+    "passport": "^0.7.0"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^1",
     "@sap/cds-dk": "^7.6.1"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "srv": "cds build/all && cd ./gen/srv && npm install"
   },
   "cds": {
     "requires": {
+      "auth": "xsuaa",
       "db": "hana"
     }
   }

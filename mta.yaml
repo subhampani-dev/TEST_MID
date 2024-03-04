@@ -23,6 +23,7 @@ modules:
           srv-url: '${default-url}'
     requires:
       - name: MID_hdi_db
+      - name: TEST_MID-Auth
   - name: TEST_MID-db-deployer
     type: hdb
     path: gen/db
@@ -42,3 +43,9 @@ resources:
       service-plan: hdi-shared
     properties:
       hdi-container-name: '${service-name}'
+  - name: TEST_MID-Auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
